@@ -73,7 +73,12 @@ jobs:
           ANDROID_KEYSTORE: ${{ runner.temp }}/debug.keystore
           ANDROID_KEYSTORE_PASSWORT: android
           ANDROID_KEY_ALIAS: mlapp-debug
-        run: bash scripts/build-android.sh
+        run: |
+          # Rahmenwerk-Jar aus der auf dem Laeufer vorhandenen Plattform nehmen.
+          export ANDROID_JAR="$(ls -d "$ANDROID_HOME"/platforms/android-3* 2>/dev/null | sort | tail -1)/android.jar"
+          echo "Rahmenwerk: $ANDROID_JAR"
+          test -f "$ANDROID_JAR"
+          bash scripts/build-android.sh
       - uses: actions/upload-artifact@v4
         with:
           name: mlapp-debug-apk

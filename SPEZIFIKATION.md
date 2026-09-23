@@ -21,52 +21,52 @@ Jeder wesentliche Begriff erhält ein **programmiertes, veränderbares visuelles
 
 Die folgende Reihenfolge ist ein Arbeitsplan. Zusammengehörige Themen können in einzelne Lektionen aufgeteilt werden.
 
-| Nr. | Thema                           | Interaktives Experiment                                            |
-| --: | ------------------------------- | ------------------------------------------------------------------ |
-|   1 | Funktionen                      | x verändern und y im Funktionsgraphen verfolgen                    |
-|   2 | Vektoren                        | Vektoren ziehen, addieren und Skalarprodukt beobachten             |
-|   3 | Matrizen                        | Punktewolke durch eine Matrix transformieren                       |
-|   4 | Ableitung                       | Tangente entlang eines Graphen bewegen                             |
-|   5 | Gradient                        | Richtung des stärksten Anstiegs auf einer Loss-Fläche erkunden     |
-|   6 | Wahrscheinlichkeit              | Verteilungen einstellen und Stichproben ziehen                     |
-|   7 | Entropie                        | Wahrscheinlichkeiten ändern und Entropie vergleichen               |
-|   8 | Lineare Regression              | Datenpunkte bewegen und eine Gerade anpassen                       |
-|   9 | Loss                            | Residuen und mittleren quadratischen Fehler anzeigen               |
-|  10 | Gradient Descent                | Lernrate ändern und Parameterupdates verfolgen                     |
-|  11 | Klassifikation                  | Entscheidungsgrenze zwischen Datenpunkten verschieben              |
-|  12 | Logistische Regression          | Sigmoid, Wahrscheinlichkeit und Schwelle einstellen                |
-|  13 | Overfitting                     | Modellkomplexität und Trainings-/Testfehler vergleichen            |
-|  14 | Regularisierung                 | Stärke der Regularisierung verändern                               |
-|  15 | Neuron                          | Eingaben, Gewichte, Bias, Summe und Aktivierung verfolgen          |
-|  16 | MLP                             | Datenfluss durch mehrere Schichten schrittweise anzeigen           |
-|  17 | Aktivierungen                   | ReLU, Sigmoid und GELU als Funktionen vergleichen                  |
-|  18 | Backpropagation                 | Rechengraph vorwärts und Gradienten rückwärts durchlaufen          |
-|  19 | Optimizer                       | SGD, Momentum und Adam auf derselben Loss-Fläche vergleichen       |
-|  20 | Embeddings                      | Vektoren und Ähnlichkeit im niedrigdimensionalen Beispiel erkunden |
-|  21 | Latent Space                    | Zwischen gelernten Repräsentationen interpolieren                  |
-|  22 | Autoencoder                     | Eingabe, Bottleneck und Rekonstruktion vergleichen                 |
-|  23 | VAE                             | Latentverteilung verändern und Stichproben erzeugen                |
-|  24 | Sequenzen                       | Rekurrenten Zustand Schritt für Schritt aktualisieren              |
-|  25 | Attention                       | Tokenbeziehungen und Attention-Matrix untersuchen                  |
-|  26 | Query, Key, Value               | Scores, Softmax-Gewichte und gewichtete Werte berechnen            |
-|  27 | Multi-Head Attention            | Verschiedene Heads und ihre Ausgaben vergleichen                   |
-|  28 | Transformer                     | Datenfluss durch einen vereinfachten Block verfolgen               |
-|  29 | Tokenisierung                   | Text in Tokens zerlegen und IDs ansehen                            |
-|  30 | Softmax                         | Logits verändern und Wahrscheinlichkeiten beobachten               |
-|  31 | Sprachmodell                    | Bedingte Verteilung des nächsten Tokens untersuchen                |
-|  32 | Sampling                        | Temperatur, Top-k und Top-p vergleichen                            |
-|  33 | Sprachmodelltraining            | Vorhersage, Cross-Entropy und Update durchlaufen                   |
-|  34 | Diffusion: Vorwärtsprozess      | Bild schrittweise verrauschen                                      |
-|  35 | Diffusion: Rückwärtsprozess     | Denoising-Schritte und Fehler sichtbar machen                      |
-|  36 | Conditioning                    | Einfluss einer Bedingung auf den Denoising-Prozess erkunden        |
-|  37 | Reinforcement Learning          | Agenten in einer Grid World steuern                                |
-|  38 | Value Function                  | Erwartete Returns der Zustände einfärben                           |
-|  39 | Q-Learning                      | Q-Werte während des Lernens verfolgen                              |
-|  40 | Policy                          | Aktionswahrscheinlichkeiten je Zustand anzeigen                    |
-|  41 | Policy Gradient                 | Policy-Update nach einer Episode nachvollziehen                    |
-|  42 | Actor-Critic                    | Policy und Wertschätzung gemeinsam beobachten                      |
-|  43 | Präferenzbasiertes Posttraining | Antworten, Präferenzen und vereinfachtes Update untersuchen        |
-|  44 | Gesamtsystem                    | Kleines autoregressives Transformer-Modell von Tokens bis Ausgabe  |
+| Nr. | Thema | Interaktives Experiment |
+|---:|---|---|
+| 1 | Funktionen | x verändern und y im Funktionsgraphen verfolgen |
+| 2 | Vektoren | Vektoren ziehen, addieren und Skalarprodukt beobachten |
+| 3 | Matrizen | Punktewolke durch eine Matrix transformieren |
+| 4 | Ableitung | Tangente entlang eines Graphen bewegen |
+| 5 | Gradient | Richtung des stärksten Anstiegs auf einer Loss-Fläche erkunden |
+| 6 | Wahrscheinlichkeit | Verteilungen einstellen und Stichproben ziehen |
+| 7 | Entropie | Wahrscheinlichkeiten ändern und Entropie vergleichen |
+| 8 | Lineare Regression | Datenpunkte bewegen und eine Gerade anpassen |
+| 9 | Loss | Residuen und mittleren quadratischen Fehler anzeigen |
+| 10 | Gradient Descent | Lernrate ändern und Parameterupdates verfolgen |
+| 11 | Klassifikation | Entscheidungsgrenze zwischen Datenpunkten verschieben |
+| 12 | Logistische Regression | Sigmoid, Wahrscheinlichkeit und Schwelle einstellen |
+| 13 | Overfitting | Modellkomplexität und Trainings-/Testfehler vergleichen |
+| 14 | Regularisierung | Stärke der Regularisierung verändern |
+| 15 | Neuron | Eingaben, Gewichte, Bias, Summe und Aktivierung verfolgen |
+| 16 | MLP | Datenfluss durch mehrere Schichten schrittweise anzeigen |
+| 17 | Aktivierungen | ReLU, Sigmoid und GELU als Funktionen vergleichen |
+| 18 | Backpropagation | Rechengraph vorwärts und Gradienten rückwärts durchlaufen |
+| 19 | Optimizer | SGD, Momentum und Adam auf derselben Loss-Fläche vergleichen |
+| 20 | Embeddings | Vektoren und Ähnlichkeit im niedrigdimensionalen Beispiel erkunden |
+| 21 | Latent Space | Zwischen gelernten Repräsentationen interpolieren |
+| 22 | Autoencoder | Eingabe, Bottleneck und Rekonstruktion vergleichen |
+| 23 | VAE | Latentverteilung verändern und Stichproben erzeugen |
+| 24 | Sequenzen | Rekurrenten Zustand Schritt für Schritt aktualisieren |
+| 25 | Attention | Tokenbeziehungen und Attention-Matrix untersuchen |
+| 26 | Query, Key, Value | Scores, Softmax-Gewichte und gewichtete Werte berechnen |
+| 27 | Multi-Head Attention | Verschiedene Heads und ihre Ausgaben vergleichen |
+| 28 | Transformer | Datenfluss durch einen vereinfachten Block verfolgen |
+| 29 | Tokenisierung | Text in Tokens zerlegen und IDs ansehen |
+| 30 | Softmax | Logits verändern und Wahrscheinlichkeiten beobachten |
+| 31 | Sprachmodell | Bedingte Verteilung des nächsten Tokens untersuchen |
+| 32 | Sampling | Temperatur, Top-k und Top-p vergleichen |
+| 33 | Sprachmodelltraining | Vorhersage, Cross-Entropy und Update durchlaufen |
+| 34 | Diffusion: Vorwärtsprozess | Bild schrittweise verrauschen |
+| 35 | Diffusion: Rückwärtsprozess | Denoising-Schritte und Fehler sichtbar machen |
+| 36 | Conditioning | Einfluss einer Bedingung auf den Denoising-Prozess erkunden |
+| 37 | Reinforcement Learning | Agenten in einer Grid World steuern |
+| 38 | Value Function | Erwartete Returns der Zustände einfärben |
+| 39 | Q-Learning | Q-Werte während des Lernens verfolgen |
+| 40 | Policy | Aktionswahrscheinlichkeiten je Zustand anzeigen |
+| 41 | Policy Gradient | Policy-Update nach einer Episode nachvollziehen |
+| 42 | Actor-Critic | Policy und Wertschätzung gemeinsam beobachten |
+| 43 | Präferenzbasiertes Posttraining | Antworten, Präferenzen und vereinfachtes Update untersuchen |
+| 44 | Gesamtsystem | Kleines autoregressives Transformer-Modell von Tokens bis Ausgabe |
 
 **Abschlussprojekt:** Ein kleines Zeichenmodell mit Tokenisierung, Embeddings, Self-Attention, Transformer-Block, Cross-Entropy, Training und autoregressiver Generierung selbst programmieren. Die genaue Trainingsimplementierung darf PyTorch für automatische Differentiation verwenden; die zuvor erklärten Rechenschritte bleiben separat nachvollziehbar.
 
@@ -108,8 +108,8 @@ type Lesson = {
 
 type Section = {
   id: string;
-  kind:
-    "heading" | "paragraph" | "equation" | "example" | "code" | "experiment" | "quiz" | "summary";
+  kind: "heading" | "paragraph" | "equation" | "example" |
+        "code" | "experiment" | "quiz" | "summary";
   visualContent: unknown;
   spokenContent: SpokenBlock[];
   experimentId?: string;

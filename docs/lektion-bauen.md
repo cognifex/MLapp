@@ -102,16 +102,20 @@ export const name: Experiment = {
   id: "exp-name",
   title: "...",
   learningGoal: "...",
-  instructions: "...",              // Bedienhinweis in einem Satz
-  spokenDescription: "...",         // was man sieht und bedienen kann
-  controls: [ /* ... */ ],
-  initialState: { /* je Regler ein Wert */ },
+  instructions: "...", // Bedienhinweis in einem Satz
+  spokenDescription: "...", // was man sieht und bedienen kann
+  controls: [/* ... */],
+  initialState: {/* je Regler ein Wert */},
   update(state, action) {
-    if (action.type === "reset") return { /* Startwerte */ };
+    if (action.type === "reset") return {/* Startwerte */};
     return { ...state, [action.controlId]: action.value };
   },
-  calculate(state): Calculated { /* Zahlen, Zeichnung, Saetze */ },
-  semanticEvents(before, after) { /* optional */ return []; },
+  calculate(state): Calculated {
+    /* Zahlen, Zeichnung, Saetze */
+  },
+  semanticEvents(before, after) {
+    /* optional */ return [];
+  },
 };
 ```
 
@@ -171,7 +175,7 @@ function wert(result: { values: { label: string; value: number }[] }, label: str
 }
 
 test("exp-name: Referenzwerte", () => {
-  const r = name.calculate({ /* Startwerte */ });
+  const r = name.calculate({/* Startwerte */});
   assert.ok(Math.abs(wert(r, "Verlust") - 1.216) < 1e-12);
 });
 
@@ -197,11 +201,11 @@ test("lek-NN: Schema ohne Beanstandung", () => {
 
 ## Sprachliche Regeln
 
-* Deutsch mit Umlauten und scharfem S; keine erfundenen Fachwoerter, englische Fachbegriffe
+- Deutsch mit Umlauten und scharfem S; keine erfundenen Fachwoerter, englische Fachbegriffe
   bleiben englisch (Embedding, Attention, Token).
-* Sprechtexte werden **gehoert**, nicht gelesen: kurze Saetze, Zahlen ausgeschrieben wo es
+- Sprechtexte werden **gehoert**, nicht gelesen: kurze Saetze, Zahlen ausgeschrieben wo es
   natuerlich klingt ("null Komma fuenf"), Formeln als Wort ("y Dach ist gleich w mal x plus b").
-* Keine Behauptung ohne Rechnung: jeder Zahlenwert in Text und Sprechfassung muss aus
+- Keine Behauptung ohne Rechnung: jeder Zahlenwert in Text und Sprechfassung muss aus
   `calculate()` stammen oder ein nachgerechnetes Beispiel sein.
 
 ## Pruefen

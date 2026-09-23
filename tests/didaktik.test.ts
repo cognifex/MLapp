@@ -11,14 +11,24 @@ import { catalogue } from "../app/src/model/lessons/index.js";
 import { experimentIds } from "../app/src/experiment/registry.js";
 import { validateCatalogue } from "../app/src/model/validate.js";
 
-const ABSCHNITTSFOLGE = ["heading", "paragraph", "equation", "experiment", "example", "code", "quiz", "summary"];
+const ABSCHNITTSFOLGE = [
+  "heading",
+  "paragraph",
+  "equation",
+  "experiment",
+  "example",
+  "code",
+  "quiz",
+  "summary",
+];
 
 test("der Katalog erfuellt die didaktische Vorlage", () => {
   const fehler: string[] = [];
   for (const lektion of catalogue.lessons) {
     const ids = lektion.sections.map((s) => s.id);
     const doppelt = ids.filter((id, i) => ids.indexOf(id) !== i);
-    if (doppelt.length > 0) fehler.push(`${lektion.id}: doppelte Abschnitts-IDs ${doppelt.join(", ")}`);
+    if (doppelt.length > 0)
+      fehler.push(`${lektion.id}: doppelte Abschnitts-IDs ${doppelt.join(", ")}`);
 
     const arten = lektion.sections.map((s) => s.kind);
     for (const pflicht of ["heading", "paragraph", "experiment", "quiz", "summary"]) {
@@ -68,7 +78,9 @@ test("jede Uebungsaufgabe hat eine Begruendung", () => {
           continue;
         }
         if (block.explanation.trim().length < 30) {
-          fehler.push(`${abschnitt.id}: Begruendung zu knapp (${block.explanation.trim().length} Zeichen)`);
+          fehler.push(
+            `${abschnitt.id}: Begruendung zu knapp (${block.explanation.trim().length} Zeichen)`,
+          );
         }
         if (block.options.length < 2) fehler.push(`${abschnitt.id}: zu wenige Antworten`);
       }
@@ -113,5 +125,9 @@ test("jede Lektion ist im Curriculum vollstaendig eingetragen", () => {
   );
   const kapitel = new Set(catalogue.chapters.map((c) => c.id));
   const ohneKapitel = catalogue.lessons.filter((l) => !kapitel.has(l.chapterId));
-  assert.deepEqual(ohneKapitel.map((l) => l.id), [], "Lektionen ohne gueltiges Kapitel");
+  assert.deepEqual(
+    ohneKapitel.map((l) => l.id),
+    [],
+    "Lektionen ohne gueltiges Kapitel",
+  );
 });

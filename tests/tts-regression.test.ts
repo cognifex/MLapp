@@ -64,7 +64,8 @@ test("Codebloecke werden erklaert, nicht vorgelesen", () => {
       verstoesse.push(`${stelle}: Erklaerung zu kurz (${erklaerung.trim().length} Zeichen)`);
     }
     for (const spur of ["def ", "return ", "()", "==", " = ", "print("]) {
-      if (erklaerung.includes(spur)) verstoesse.push(`${stelle}: Code in der Erklaerung ("${spur}")`);
+      if (erklaerung.includes(spur))
+        verstoesse.push(`${stelle}: Code in der Erklaerung ("${spur}")`);
     }
   }
   assert.deepEqual(verstoesse, []);
@@ -77,7 +78,9 @@ test("jeder Sprechblock hat einen Mindestinhalt", () => {
   for (const { stelle, block } of alleSprechbloecke()) {
     const grenze = mindestlaenge[block.kind] ?? 12;
     if (textVon(block).trim().length < grenze) {
-      verstoesse.push(`${stelle}: zu kurz (${textVon(block).trim().length} Zeichen, erwartet ${grenze})`);
+      verstoesse.push(
+        `${stelle}: zu kurz (${textVon(block).trim().length} Zeichen, erwartet ${grenze})`,
+      );
     }
   }
   assert.deepEqual(verstoesse, []);
@@ -132,5 +135,9 @@ test("die Suite deckt alle Lektionen ab", () => {
     `zu wenige Sprechbloecke: ${bloecke.length} fuer ${catalogue.lessons.length} Lektionen`,
   );
   const ohne = catalogue.lessons.filter((l) => l.sections.every((s) => s.spoken.length === 0));
-  assert.deepEqual(ohne.map((l) => l.id), [], "Lektionen ohne Sprechfassung");
+  assert.deepEqual(
+    ohne.map((l) => l.id),
+    [],
+    "Lektionen ohne Sprechfassung",
+  );
 });

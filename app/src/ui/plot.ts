@@ -215,7 +215,8 @@ export function renderDrawing(
       const skala = spec.style ?? "verlust";
       for (const cell of spec.cells) {
         const t = (cell.value - min) / span;
-        c.ctx.fillStyle = skala === "grau" ? grauColor(t) : skala === "anteil" ? anteilColor(t) : lossColor(t);
+        c.ctx.fillStyle =
+          skala === "grau" ? grauColor(t) : skala === "anteil" ? anteilColor(t) : lossColor(t);
         c.ctx.fillRect(
           cell.col * cellW,
           cell.row * cellH,
@@ -248,11 +249,7 @@ export function renderDrawing(
       c.ctx.textBaseline = "middle";
       for (const cell of spec.cells) {
         if (!cell.label) continue;
-        c.ctx.fillText(
-          cell.label,
-          (cell.col + 0.5) * cellW,
-          (cell.row + 0.5) * cellH,
-        );
+        c.ctx.fillText(cell.label, (cell.col + 0.5) * cellW, (cell.row + 0.5) * cellH);
       }
       c.ctx.restore();
       // Pfeile und Punkte liegen in Datenkoordinaten ueber der Farbflaeche.
@@ -281,7 +278,8 @@ export function renderDrawing(
           ctx.fillRect(linkeSpalte, y - balkenhoehe / 2, breite, balkenhoehe);
           ctx.globalAlpha = 1;
           if (item.ghost !== undefined) {
-            const ghostBreite = (Math.max(0, item.ghost) / obergrenze) * (c.width - linkeSpalte - 46);
+            const ghostBreite =
+              (Math.max(0, item.ghost) / obergrenze) * (c.width - linkeSpalte - 46);
             ctx.strokeStyle = cssVar("--text-schwach", "#5f6368");
             ctx.setLineDash([4, 3]);
             ctx.strokeRect(linkeSpalte, y - balkenhoehe / 2, ghostBreite, balkenhoehe);
@@ -291,7 +289,11 @@ export function renderDrawing(
           ctx.textAlign = "right";
           ctx.fillText(item.label.slice(0, 16), linkeSpalte - 6, y);
           ctx.textAlign = "left";
-          ctx.fillText(`${item.value.toFixed(2).replace(".", ",")}${spec.unit ? ` ${spec.unit}` : ""}`, linkeSpalte + breite + 4, y);
+          ctx.fillText(
+            `${item.value.toFixed(2).replace(".", ",")}${spec.unit ? ` ${spec.unit}` : ""}`,
+            linkeSpalte + breite + 4,
+            y,
+          );
         });
         // Grundlinie
         ctx.strokeStyle = cssVar("--rand", "#d7dae0");
@@ -319,7 +321,11 @@ export function renderDrawing(
           }
           ctx.fillStyle = cssVar("--text", "#1f2328");
           ctx.textAlign = "center";
-          ctx.fillText(item.value.toFixed(2).replace(".", ","), x + breite / 2, grundlinie - hoehe - 10);
+          ctx.fillText(
+            item.value.toFixed(2).replace(".", ","),
+            x + breite / 2,
+            grundlinie - hoehe - 10,
+          );
           ctx.fillStyle = cssVar("--text-schwach", "#5f6368");
           ctx.fillText(item.label.slice(0, 12), x + breite / 2, grundlinie + 12);
         });

@@ -6,16 +6,16 @@ redaktionell nicht fertig.
 
 ## Aufbau einer Lektion
 
-| Abschnitt | Pflicht | Inhalt |
-|---|---|---|
-| heading | ja | Ueberschrift der Lektion, ein Satz zum Einstieg |
-| paragraph | ja | Worum es geht, ohne Fachjargon, mit Bezug auf Bekanntes |
-| equation | bei formalen Themen | Die Formalie, plus ausgeschriebener Sprechtext |
-| experiment | ja | Bedienbares Experiment mit Sprechbeschreibung |
-| example | ja (oder code) | Durchgerechnetes Beispiel mit sichtbarem Rechenweg |
-| code | optional | Kurzes Python-Stueck, das dasselbe Verfahren zeigt |
-| quiz | ja | Verstaendnisaufgabe mit richtiger Antwort und Begruendung |
-| summary | ja | Zusammenfassung in zwei bis drei Saetzen |
+| Abschnitt  | Pflicht             | Inhalt                                                    |
+| ---------- | ------------------- | --------------------------------------------------------- |
+| heading    | ja                  | Ueberschrift der Lektion, ein Satz zum Einstieg           |
+| paragraph  | ja                  | Worum es geht, ohne Fachjargon, mit Bezug auf Bekanntes   |
+| equation   | bei formalen Themen | Die Formalie, plus ausgeschriebener Sprechtext            |
+| experiment | ja                  | Bedienbares Experiment mit Sprechbeschreibung             |
+| example    | ja (oder code)      | Durchgerechnetes Beispiel mit sichtbarem Rechenweg        |
+| code       | optional            | Kurzes Python-Stueck, das dasselbe Verfahren zeigt        |
+| quiz       | ja                  | Verstaendnisaufgabe mit richtiger Antwort und Begruendung |
+| summary    | ja                  | Zusammenfassung in zwei bis drei Saetzen                  |
 
 Reihenfolge: erst das Problem und die Anschauung, dann die Formalie, dann das Bedienen, dann das
 Rechnen, zuletzt die Pruefung. Ein Beispiel vor der Formalie ist erlaubt; eine Formalie ohne

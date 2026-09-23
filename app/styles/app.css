@@ -1,0 +1,469 @@
+/* MLapp – Grundlayout.
+   Massstaebe: Mindestbreite 360 CSS-px (einspaltig), ab 768 px zweispaltig mit Curriculum links.
+   Alle Bedienelemente haben mindestens 44x44 CSS-px. Farben tragen nie allein eine Information. */
+
+:root {
+  --hintergrund: #ffffff;
+  --flaeche: #f6f7f9;
+  --rand: #d7dae0;
+  --text: #1f2328;
+  --text-schwach: #5f6368;
+  --akzent: #1a73e8;
+  --akzent-schwach: #e8f0fe;
+  --warnung: #b3261e;
+  --gut: #188038;
+  --radius: 12px;
+  --abstand: 16px;
+  --kopfhoehe: 56px;
+  --sicher-oben: env(safe-area-inset-top, 0px);
+  --sicher-unten: env(safe-area-inset-bottom, 0px);
+  --sicher-links: env(safe-area-inset-left, 0px);
+  --sicher-rechts: env(safe-area-inset-right, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hintergrund: #15171b;
+    --flaeche: #1e2126;
+    --rand: #34383f;
+    --text: #e8eaed;
+    --text-schwach: #a9adb4;
+    --akzent: #8ab4f8;
+    --akzent-schwach: #1f2a3d;
+    --warnung: #f2b8b5;
+    --gut: #81c995;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Ohne diese Zeile ueberdeckt .vollbild (display: flex) die ganze Seite, obwohl das
+   hidden-Attribut gesetzt ist - die Regel der UA-Stylesheet wird von display: flex ueberstimmt.
+   Genau dieser Fehler war im Bildschirmfoto sichtbar. */
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--hintergrund);
+  color: var(--text);
+  font:
+    16px/1.55 system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  padding-left: var(--sicher-links);
+  padding-right: var(--sicher-rechts);
+  overflow-wrap: break-word;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: 8px;
+  top: 8px;
+  background: var(--flaeche);
+  padding: 8px;
+  border-radius: var(--radius);
+  z-index: 10;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--kopfhoehe);
+  padding: calc(var(--sicher-oben) + 8px) var(--abstand) 8px;
+  background: var(--hintergrund);
+  border-bottom: 1px solid var(--rand);
+  z-index: 5;
+}
+
+.app-header h1 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon-button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--rand);
+  border-radius: var(--radius);
+  background: var(--flaeche);
+  color: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.icon-button:focus-visible,
+.knopf:focus-visible,
+.knopf-rand:focus-visible {
+  outline: 3px solid var(--akzent);
+  outline-offset: 2px;
+}
+
+.knopf,
+.knopf-rand {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+}
+.knopf {
+  background: var(--akzent);
+  border: 1px solid var(--akzent);
+  color: #fff;
+}
+.knopf-rand {
+  background: transparent;
+  border: 1px solid var(--rand);
+  color: var(--text);
+}
+
+.app-main {
+  padding: var(--abstand) var(--abstand) calc(96px + var(--sicher-unten));
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hinweis {
+  color: var(--text-schwach);
+}
+
+/* Ab 768 px zweispaltig: Curriculum links, Inhalt rechts. */
+@media (min-width: 768px) {
+  .app-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+  .curriculum-spalte {
+    position: sticky;
+    top: calc(var(--kopfhoehe) + var(--sicher-oben) + 16px);
+    max-height: calc(100vh - var(--kopfhoehe) - 48px);
+    overflow-y: auto;
+  }
+}
+
+/* Auf dem Smartphone steht der Lerninhalt oben, das Curriculum darunter - sonst muss man erst
+   an der ganzen Liste vorbeiscrollen, um zur Lektion zu kommen. */
+@media (max-width: 767px) {
+  .app-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  .app-layout > article {
+    order: -1;
+  }
+  .curriculum-spalte {
+    order: 1;
+    border-top: 1px solid var(--rand);
+    padding-top: 12px;
+  }
+}
+
+.kapitel-titel {
+  margin: 16px 0 8px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-schwach);
+}
+
+.lektionen-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lektionen-liste a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  color: inherit;
+  text-decoration: none;
+}
+.lektionen-liste a:hover {
+  background: var(--flaeche);
+}
+.lektionen-liste a[aria-current="page"] {
+  background: var(--akzent-schwach);
+  border-left: 4px solid var(--akzent);
+}
+.lektionen-liste .fortschritt-zeichen {
+  min-width: 22px;
+  text-align: center;
+  color: var(--gut);
+}
+
+.lektion-titel {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+}
+.lektion-ziel {
+  color: var(--text-schwach);
+  margin: 0 0 20px;
+}
+
+.abschnitt {
+  margin: 0 0 24px;
+  padding: 0 0 4px;
+  border-bottom: 1px solid var(--rand);
+}
+.abschnitt:last-child {
+  border-bottom: none;
+}
+.abschnitt.aktiv {
+  background: var(--akzent-schwach);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.abschnitt h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.formel {
+  overflow-x: auto;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  background: var(--flaeche);
+  border: 1px solid var(--rand);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.code {
+  margin: 0;
+  overflow-x: auto;
+  font:
+    0.9rem/1.5 ui-monospace,
+    Menlo,
+    Consolas,
+    monospace;
+  background: var(--flaeche);
+  border: 1px solid var(--rand);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.liste {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.experiment {
+  border: 1px solid var(--rand);
+  border-radius: var(--radius);
+  padding: 12px;
+  background: var(--flaeche);
+}
+.experiment-kopf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.experiment-kopf h4 {
+  margin: 0;
+  flex: 1;
+  font-size: 0.95rem;
+}
+.zeichnung {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  max-height: 60vh;
+  display: block;
+  background: var(--hintergrund);
+  border: 1px solid var(--rand);
+  border-radius: var(--radius);
+  touch-action: none;
+}
+
+.werte {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 10px 0;
+  padding: 0;
+  list-style: none;
+}
+.werte li {
+  min-width: 96px;
+}
+.werte .bez {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-schwach);
+}
+.werte .zahl {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.regler {
+  margin: 12px 0;
+}
+.regler-kopf {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+.regler input[type="range"] {
+  width: 100%;
+  min-height: 44px;
+  accent-color: var(--akzent);
+}
+
+.erklaerung {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-left: 4px solid var(--akzent);
+  background: var(--akzent-schwach);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.quiz {
+  margin: 0;
+  padding: 0;
+}
+.quiz-antworten {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+}
+.quiz-antworten button {
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 8px;
+  text-align: left;
+  padding: 10px 12px;
+  border: 1px solid var(--rand);
+  border-radius: var(--radius);
+  background: var(--hintergrund);
+  color: inherit;
+  cursor: pointer;
+}
+.quiz-antworten button.richtig {
+  border-color: var(--gut);
+  color: var(--gut);
+  font-weight: 600;
+}
+.quiz-antworten button.falsch {
+  border-color: var(--warnung);
+  color: var(--warnung);
+}
+
+.vollbild {
+  position: fixed;
+  inset: 0;
+  background: var(--hintergrund);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--sicher-oben) + 8px) var(--abstand) calc(var(--sicher-unten) + 8px);
+}
+.vollbild-kopf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vollbild-kopf h2 {
+  flex: 1;
+  font-size: 1rem;
+  margin: 0;
+}
+.vollbild #vollbild-inhalt {
+  flex: 1;
+  overflow: auto;
+}
+.vollbild .zeichnung {
+  max-height: none;
+  height: 100%;
+}
+
+.einstellungen {
+  border: 1px solid var(--rand);
+  border-radius: var(--radius);
+  padding: 16px;
+  background: var(--hintergrund);
+  color: var(--text);
+  max-width: min(560px, 92vw);
+}
+.einstellungen::backdrop {
+  background: rgb(0 0 0 / 40%);
+}
+.einstellungen label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+}
+.einstellungen input[type="range"] {
+  flex: 1;
+}
+
+.vorleser {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--flaeche);
+  border-top: 1px solid var(--rand);
+  padding: 8px var(--abstand) calc(8px + var(--sicher-unten));
+  z-index: 15;
+}
+.vorleser-text {
+  font-size: 0.85rem;
+  color: var(--text-schwach);
+  max-height: 2.6em;
+  overflow: hidden;
+}
+.vorleser-knoepfe {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vorleser .tempo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 0.85rem;
+}
+.vorleser .tempo input {
+  width: 110px;
+  min-height: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

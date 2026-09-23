@@ -1,0 +1,32 @@
+{
+  "name": "mlapp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MLapp – deutschsprachige, interaktive Lernanwendung fuer die Theorie hinter Machine Learning und moderner KI",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit -p tsconfig.json",
+    "build": "node node_modules/typescript/bin/tsc -p tsconfig.json && node tools/copy-assets.mjs",
+    "test": "npm run build && node --test dist/tests/*.test.js",
+    "validate": "node dist/app/src/cli/validate.js",
+    "lint": "node node_modules/eslint/bin/eslint.js .",
+    "format": "node node_modules/prettier/bin/prettier.cjs --write .",
+    "format:check": "node node_modules/prettier/bin/prettier.cjs --check .",
+    "serve": "node tools/serve.mjs",
+    "smoke": "bash scripts/ui-smoke.sh",
+    "android:build": "bash scripts/build-android.sh",
+    "ci": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run validate"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.13.6",
+    "eslint": "10.11.0",
+    "prettier": "3.9.9",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.70.1"
+  }
+}

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+android/build/
+*.log
+*.apk
+*.keystore
+*.jks
+*.pk8
+.DS_Store

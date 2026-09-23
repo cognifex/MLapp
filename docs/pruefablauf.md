@@ -71,3 +71,21 @@ Ein stiller Einspielvorgang durch die App selbst ist auf diesem Android nicht mo
     tests/formel.test.ts      Formeln: kein rohes LaTeX im sichtbaren Text
     tests/progress.test.ts    AND-07: Fortschritt, Leseposition, robuste Speicherfehler
     tests/lexikon.test.ts     TTS-09 (Grundlage): Aussprachelexikon, Sprechtexte je Block
+    tests/tts-regression.test.ts  QA-03: Sprachfassung ueber den ganzen Katalog (kein LaTeX im
+                              Sprechtext, Code erklaert statt vorgelesen, Begriffe im Lexikon)
+    tests/didaktik.test.ts    CONTENT-04: didaktische Vorlage (docs/lektion-vorlage.md) maschinell
+    tests/lektionen-*.test.ts Referenzwerte und Schema je Lektionsgruppe
+
+## Hoerfassung pruefen (TTS-12)
+
+`#/hoeren/lek-01` fuehrt eine Lektion ohne Bedienung vor. Der Pruefablauf misst im DOM:
+Knopf "Hoerfassung starten" vorhanden, Rueckweg "Zur Lektion mit Experiment" vorhanden,
+**kein** Experiment-Widget (Interaktionen werden uebersprungen) und die Vorleserleiste sichtbar.
+
+## Leistungsmessung (AND-09, QA-04)
+
+Die Selbstauskunft der App nennt zwei Messwerte, die `scripts/ui-smoke.sh` ausgibt:
+Zeit bis die Oberflaeche bereit ist (`data-ladezeit`, in Millisekunden seit dem Laden) und Dauer
+des letzten Zeichnens (`data-zeichnungzeit`, gemessen in `app/src/ui/experiment-widget.ts`).
+Gemessen auf dem Geraet: bereit nach 780 bis 814 ms, Zeichnen 3,5 bis 4,6 ms. Die Messung laeuft
+in CI bei jeder Aenderung mit - Werte ausserhalb des Budgets fallen dort auf.

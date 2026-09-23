@@ -13,6 +13,7 @@ import {
   createStore,
   normaliseState,
   type ControlValue,
+  type Experiment,
   type ExperimentState,
   type SliderControl,
 } from "../app/src/experiment/contract.js";
@@ -126,10 +127,38 @@ test("unbrauchbare gespeicherte Zustaende fallen auf gueltige Werte zurueck", ()
   for (const control of experiment.controls) {
     assert.ok(control.id in state, `${control.id} fehlt nach dem Wiederherstellen`);
   }
-  assert.equal(Number.isFinite(state[experiment.controls[0]!.id] as number), true);
+  assert.ok(
+    gueltigerWert(experiment.controls[0]!, state),
+    "erster Regler hat einen gueltigen Wert",
+  );
   store.restore("{kein json");
-  assert.equal(Number.isFinite(store.state()[experiment.controls[0]!.id] as number), true);
+  assert.ok(gueltigerWert(experiment.controls[0]!, store.state()), "auch nach Unsinn gueltig");
 });
+
+/** Prueft, ob ein Wert zur Art des Reglers passt (nicht jede Lektion beginnt mit einem Regler). */
+function gueltigerWert(control: Experiment["controls"][number], state: ExperimentState): boolean {
+  const wert = state[control.id];
+  switch (control.kind) {
+    case "slider":
+      return (
+        typeof wert === "number" &&
+        Number.isFinite(wert) &&
+        wert >= control.min &&
+        wert <= control.max
+      );
+    case "toggle":
+      return typeof wert === "boolean";
+    case "select":
+      return typeof wert === "string" && control.options.some((o) => o.value === wert);
+    case "point":
+      return (
+        typeof wert === "object" &&
+        wert !== null &&
+        Number.isFinite((wert as { x: number }).x) &&
+        Number.isFinite((wert as { y: number }).y)
+      );
+  }
+}
 
 test("die Zeichengroesse beruehrt die Rechnung nicht", () => {
   const experiment = experiments[0]!;

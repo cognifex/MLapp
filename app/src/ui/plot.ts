@@ -161,6 +161,21 @@ function lossColor(t: number): string {
   return `hsl(214 ${saturation}% ${light}%)`;
 }
 
+/** Graustufen fuer Bilder (Diffusion, Autoencoder): 0 = schwarz, 1 = weiss. */
+function grauColor(t: number): string {
+  const clamped = Math.min(1, Math.max(0, t));
+  const wert = Math.round(clamped * 255);
+  return `rgb(${wert} ${wert} ${wert})`;
+}
+
+/** Anteile auf einer Farbe: hell bei 0, satt bei 1 (Wahrscheinlichkeiten, Attention). */
+function anteilColor(t: number): string {
+  const clamped = Math.min(1, Math.max(0, t));
+  const light = 96 - 52 * clamped;
+  const saturation = 25 + 60 * clamped;
+  return `hsl(214 ${saturation}% ${light}%)`;
+}
+
 /** Zeichnet eine Rechenausgabe. Rueckgabe: Beschriftung fuer die Bildschirmleser. */
 export function renderDrawing(
   canvas: HTMLCanvasElement,
@@ -197,9 +212,10 @@ export function renderDrawing(
       const span = max - min || 1;
       const cellW = c.width / spec.cols;
       const cellH = c.height / spec.rows;
+      const skala = spec.style ?? "verlust";
       for (const cell of spec.cells) {
         const t = (cell.value - min) / span;
-        c.ctx.fillStyle = lossColor(t);
+        c.ctx.fillStyle = skala === "grau" ? grauColor(t) : skala === "anteil" ? anteilColor(t) : lossColor(t);
         c.ctx.fillRect(
           cell.col * cellW,
           cell.row * cellH,
@@ -224,9 +240,96 @@ export function renderDrawing(
         }
       }
       c.ctx.restore();
+      // Beschriftungen in den Zellen (z. B. Zustaende einer Grid World, Attention-Gewichte).
+      c.ctx.save();
+      c.ctx.fillStyle = cssVar("--text", "#1f2328");
+      c.ctx.font = `${Math.max(9, Math.min(13, cellH * 0.42))}px system-ui, sans-serif`;
+      c.ctx.textAlign = "center";
+      c.ctx.textBaseline = "middle";
+      for (const cell of spec.cells) {
+        if (!cell.label) continue;
+        c.ctx.fillText(
+          cell.label,
+          (cell.col + 0.5) * cellW,
+          (cell.row + 0.5) * cellH,
+        );
+      }
+      c.ctx.restore();
       // Pfeile und Punkte liegen in Datenkoordinaten ueber der Farbflaeche.
       spec.vectors?.forEach((vector) => drawVector(c, vector));
       spec.points?.forEach((mark) => drawMark(c, mark));
+      break;
+    }
+    case "bars": {
+      const c = setup(canvas, [0, 1], [0, 1]);
+      if (!c) return;
+      const werte = spec.items.map((item) => item.value);
+      const obergrenze = spec.yMax ?? Math.max(1e-9, ...werte);
+      const { ctx } = c;
+      ctx.save();
+      ctx.font = "12px system-ui, sans-serif";
+      ctx.textBaseline = "middle";
+      if (spec.horizontal) {
+        const zeilenhoehe = c.height / Math.max(1, spec.items.length);
+        const balkenhoehe = Math.max(6, zeilenhoehe * 0.6);
+        const linkeSpalte = Math.min(120, c.width * 0.34);
+        spec.items.forEach((item, i) => {
+          const y = i * zeilenhoehe + zeilenhoehe / 2;
+          const breite = (Math.max(0, item.value) / obergrenze) * (c.width - linkeSpalte - 46);
+          ctx.fillStyle = item.color ?? cssVar("--akzent", "#1a73e8");
+          ctx.globalAlpha = item.highlighted ? 1 : 0.75;
+          ctx.fillRect(linkeSpalte, y - balkenhoehe / 2, breite, balkenhoehe);
+          ctx.globalAlpha = 1;
+          if (item.ghost !== undefined) {
+            const ghostBreite = (Math.max(0, item.ghost) / obergrenze) * (c.width - linkeSpalte - 46);
+            ctx.strokeStyle = cssVar("--text-schwach", "#5f6368");
+            ctx.setLineDash([4, 3]);
+            ctx.strokeRect(linkeSpalte, y - balkenhoehe / 2, ghostBreite, balkenhoehe);
+            ctx.setLineDash([]);
+          }
+          ctx.fillStyle = cssVar("--text", "#1f2328");
+          ctx.textAlign = "right";
+          ctx.fillText(item.label.slice(0, 16), linkeSpalte - 6, y);
+          ctx.textAlign = "left";
+          ctx.fillText(`${item.value.toFixed(2).replace(".", ",")}${spec.unit ? ` ${spec.unit}` : ""}`, linkeSpalte + breite + 4, y);
+        });
+        // Grundlinie
+        ctx.strokeStyle = cssVar("--rand", "#d7dae0");
+        ctx.beginPath();
+        ctx.moveTo(linkeSpalte, 6);
+        ctx.lineTo(linkeSpalte, c.height - 6);
+        ctx.stroke();
+      } else {
+        const spaltenbreite = c.width / Math.max(1, spec.items.length);
+        const grundlinie = c.height - 26;
+        spec.items.forEach((item, i) => {
+          const hoehe = (Math.max(0, item.value) / obergrenze) * (grundlinie - 22);
+          const x = i * spaltenbreite + spaltenbreite * 0.15;
+          const breite = spaltenbreite * 0.7;
+          ctx.fillStyle = item.color ?? cssVar("--akzent", "#1a73e8");
+          ctx.globalAlpha = item.highlighted ? 1 : 0.75;
+          ctx.fillRect(x, grundlinie - hoehe, breite, hoehe);
+          ctx.globalAlpha = 1;
+          if (item.ghost !== undefined) {
+            const ghostHoehe = (Math.max(0, item.ghost) / obergrenze) * (grundlinie - 22);
+            ctx.strokeStyle = cssVar("--text-schwach", "#5f6368");
+            ctx.setLineDash([4, 3]);
+            ctx.strokeRect(x, grundlinie - ghostHoehe, breite, ghostHoehe);
+            ctx.setLineDash([]);
+          }
+          ctx.fillStyle = cssVar("--text", "#1f2328");
+          ctx.textAlign = "center";
+          ctx.fillText(item.value.toFixed(2).replace(".", ","), x + breite / 2, grundlinie - hoehe - 10);
+          ctx.fillStyle = cssVar("--text-schwach", "#5f6368");
+          ctx.fillText(item.label.slice(0, 12), x + breite / 2, grundlinie + 12);
+        });
+        ctx.strokeStyle = cssVar("--rand", "#d7dae0");
+        ctx.beginPath();
+        ctx.moveTo(0, grundlinie);
+        ctx.lineTo(c.width, grundlinie);
+        ctx.stroke();
+      }
+      ctx.restore();
       break;
     }
   }
@@ -245,5 +348,7 @@ export function describeDrawing(spec: DrawingSpec): string {
       return `Punktwolke mit ${spec.points.length} Punkten und ${spec.lines.length} Linien.`;
     case "grid":
       return `Farbflaeche aus ${spec.cols} mal ${spec.rows} Zellen; heller bedeutet kleinerer Wert.`;
+    case "bars":
+      return `Saeulendiagramm mit ${spec.items.length} Werten${spec.unit ? ` in ${spec.unit}` : ""}.`;
   }
 }

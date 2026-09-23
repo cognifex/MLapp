@@ -31,6 +31,16 @@ export type ExperimentHost = {
   vollbildKnopf?: boolean;
 };
 
+/**
+ * Dauer des letzten Zeichnens in Millisekunden. Wird von der Selbstauskunft der App gelesen
+ * (AND-09: Leistungsbudget messen statt behaupten).
+ */
+let letzteZeichenzeitMs = 0;
+
+export function zeichenzeitMs(): number {
+  return letzteZeichenzeitMs;
+}
+
 function wertAnzeigen(result: Calculated): HTMLElement {
   const liste = document.createElement("ul");
   liste.className = "werte";
@@ -123,10 +133,12 @@ export function montiereExperiment(host: ExperimentHost): () => void {
   container.append(kopf, hinweis, canvas, steuerung, erklaerung);
 
   function zeichne(): void {
+    const start = performance.now();
     const result = store.result();
     renderDrawing(canvas, result.drawing, describeDrawing(result.drawing));
     const erklaerungAlt = container.querySelector(".werte");
     erklaerungAlt?.replaceWith(wertAnzeigen(result));
+    letzteZeichenzeitMs = performance.now() - start;
   }
 
   function baueSteuerung(): void {

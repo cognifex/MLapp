@@ -49,7 +49,8 @@ type Route =
   | { art: "start" }
   | { art: "curriculum" }
   | { art: "einstellungen" }
-  | { art: "lektion"; lektionId: string; abschnittId?: string };
+  | { art: "lektion"; lektionId: string; abschnittId?: string }
+  | { art: "hoeren"; lektionId: string };
 
 export function leseRoute(hash: string): Route {
   const teile = hash
@@ -64,6 +65,9 @@ export function leseRoute(hash: string): Route {
     return abschnittId
       ? { art: "lektion", lektionId: teile[1], abschnittId }
       : { art: "lektion", lektionId: teile[1] };
+  }
+  if (teile[0] === "hoeren" && teile[1]) {
+    return { art: "hoeren", lektionId: teile[1] };
   }
   return { art: "start" };
 }
@@ -256,6 +260,11 @@ export function starteShell(elemente: ShellElemente): void {
     }
 
     const blatt = el("p");
+    const hoerfassung = el("button", { klasse: "knopf-rand", text: "Als Hoerfassung abspielen" });
+    hoerfassung.addEventListener("click", () => {
+      window.location.hash = `#/hoeren/${lektion.id}`;
+    });
+    blatt.append(hoerfassung);
     const vorherige = previousLessonId(lektion.id);
     const naechste = nextLessonId(lektion.id);
     if (vorherige) {
@@ -430,6 +439,64 @@ export function starteShell(elemente: ShellElemente): void {
     }
     huelle.append(fertig);
     return huelle;
+  }
+
+  // --- Hoerfassung (TTS-12) ----------------------------------------------
+
+  /**
+   * Fuehrt eine Lektion als reine Hoerfassung vor: Lernziel, Erklaerung, Beispiel, Beschreibung
+   * des Experiments, Ergebnis und Zusammenfassung. Die Interaktionen werden uebersprungen - das
+   * Experiment wird beschrieben, nicht bedient. Damit eignet sich die Fassung fuer Wege, auf denen
+   * niemand auf den Bildschirm sehen kann.
+   */
+  function zeichneHoerfassung(lektion: Lesson): void {
+    aktuelleLektion = lektion;
+    const wrapper = el("div");
+    wrapper.append(
+      el("h2", { klasse: "lektion-titel", text: `Hoerfassung: ${lektion.title}` }),
+      el("p", {
+        klasse: "lektion-ziel",
+        text: "Vorgelesen ohne Bedienung: Lernziel, Erklaerung, Beispiel, Beschreibung des Experiments, Ergebnis und Zusammenfassung.",
+      }),
+      el("h3", { text: "Lernziele" }),
+    );
+    const ziele = el("ul", { klasse: "liste" });
+    for (const ziel of lektion.learningGoals) ziele.append(el("li", { text: ziel }));
+    wrapper.append(ziele);
+
+    const ablauf = el("ol", { klasse: "liste" });
+    for (const abschnitt of lektion.sections) {
+      ablauf.append(el("li", { text: `${abschnitt.title} (${abschnitt.kind})` }));
+    }
+    wrapper.append(el("h3", { text: "Ablauf" }), ablauf);
+
+    const knoepfe = el("p");
+    const start = el("button", { klasse: "knopf", text: "Hoerfassung starten" });
+    start.addEventListener("click", () => {
+      elemente.vorleser.hidden = false;
+      void player.start(0);
+    });
+    const zurLektion = el("button", { klasse: "knopf-rand", text: "Zur Lektion mit Experiment" });
+    zurLektion.style.marginLeft = "8px";
+    zurLektion.addEventListener("click", () => {
+      window.location.hash = `#/lektion/${lektion.id}`;
+    });
+    knoepfe.append(start, zurLektion);
+    wrapper.append(knoepfe);
+    wrapper.append(
+      el("p", {
+        klasse: "hinweis",
+        text: `Sprachausgabe ueber ${engine.name}; Tempo und Stimme stehen in den Einstellungen.`,
+      }),
+    );
+    elemente.inhalt.append(wrapper);
+
+    const abschnitte = lektion.sections
+      .filter((s) => s.spoken.length > 0)
+      .map((s) => ({ abschnittId: s.id, texte: bloeckeZuTexten(s.spoken) }));
+    player.setzeAbschnitte(abschnitte);
+    elemente.vorleser.hidden = abschnitte.length === 0;
+    elemente.vorleserText.textContent = `Hoerfassung bereit: ${abschnitte.length} Abschnitte, keine Bedienung noetig.`;
   }
 
   // --- Vollbild (AND-05) --------------------------------------------------
@@ -650,6 +717,19 @@ export function starteShell(elemente: ShellElemente): void {
         }
         setzeKopf(lektion.title, true);
         zeichneLektion(lektion, route.abschnittId);
+        break;
+      }
+      case "hoeren": {
+        const lektion = lessonById(route.lektionId);
+        if (!lektion) {
+          setzeKopf("Unbekannte Lektion", true);
+          elemente.inhalt.append(
+            el("p", { klasse: "hinweis", text: `Die Lektion ${route.lektionId} gibt es nicht.` }),
+          );
+          return;
+        }
+        setzeKopf(`Hoerfassung: ${lektion.title}`, true);
+        zeichneHoerfassung(lektion);
         break;
       }
     }

@@ -129,7 +129,29 @@ export type DrawingSpec =
       yRange: [number, number];
       vectors?: Vector[];
       points?: Mark[];
+      /** Farbskala: Verlustflaeche, Graustufen (Bilder) oder Anteile auf einer Farbe. */
+      style?: "verlust" | "grau" | "anteil";
+    }
+  | {
+      /** Saeulen: Verteilungen, Wahrscheinlichkeiten, Softmax, Entropie, Attention-Gewichte. */
+      kind: "bars";
+      items: Bar[];
+      /** Obere Grenze der Achse; ohne Angabe zaehlt die groesste Saeule. */
+      yMax?: number;
+      unit?: string;
+      /** Waagerechte Saeulen fuer lange Beschriftungen (z. B. Tokens). */
+      horizontal?: boolean;
     };
+
+export type Bar = {
+  label: string;
+  value: number;
+  color?: string;
+  /** Hervorhebung, z. B. die gewaehlte Klasse. */
+  highlighted?: boolean;
+  /** Optionaler zweiter Wert als Umriss (z. B. Sollwert oder vorheriger Wert). */
+  ghost?: number;
+};
 
 export type Curve = { label: string; points: [number, number][]; dashed?: boolean; color?: string };
 export type Mark = { label: string; x: number; y: number; color?: string };

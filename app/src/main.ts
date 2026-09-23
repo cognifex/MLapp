@@ -8,6 +8,7 @@ import { catalogue } from "./model/lessons/index.js";
 import { experimentIds } from "./experiment/registry.js";
 import { formatIssues, validateCatalogue } from "./model/validate.js";
 import { starteShell, type ShellElemente } from "./ui/shell.js";
+import { zeichenzeitMs } from "./ui/experiment-widget.js";
 
 function hole(id: string): HTMLElement {
   const node = document.getElementById(id);
@@ -90,6 +91,8 @@ function installiereSelbstauskunft(): void {
       document.querySelector(".app-layout") ?? document.body,
     ).display;
     anzeige.dataset.zeichnungfarben = String(zaehleFarbenInZeichnung());
+    anzeige.dataset.ladezeit = String(Math.round(performance.now()));
+    anzeige.dataset.zeichnungzeit = String(Math.round(zeichenzeitMs() * 100) / 100);
     // Nur die Formelfelder pruefen: Codebloecke enthalten bewusst Rueckstriche.
     const formelText = [...document.querySelectorAll(".formel")]
       .map((n) => n.textContent ?? "")

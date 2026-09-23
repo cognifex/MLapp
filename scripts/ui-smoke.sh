@@ -62,7 +62,9 @@ for B in $BREITEN; do
   ANZEIGE=$(echo "$ZEILE" | grep -o 'data-zweispaltig="[^"]*"' | cut -d'"' -f2)
   FARBEN=$(echo "$ZEILE" | grep -o 'data-zeichnungfarben="[0-9]*"' | cut -d'"' -f2)
   FORMELROH=$(echo "$ZEILE" | grep -o 'data-formelroh="[a-z]*"' | cut -d'"' -f2)
-  echo "  ${B}px: Fenster ${BREITE}px, Inhalt ${SCROLL}px, Abschnitte ${ABSCHNITTE}, Regler ${REGLER}, Zeichnungen ${ZEICHNUNG} (${FARBEN} Farben), rohe Formel: ${FORMELROH}, Anzeigeart ${ANZEIGE}"
+  LADEZEIT=$(echo "$ZEILE" | grep -o 'data-ladezeit="[0-9]*"' | cut -d'"' -f2)
+  ZEICHENZEIT=$(echo "$ZEILE" | grep -o 'data-zeichnungzeit="[0-9.]*"' | cut -d'"' -f2)
+  echo "  ${B}px: Fenster ${BREITE}px, Inhalt ${SCROLL}px, Abschnitte ${ABSCHNITTE}, Regler ${REGLER}, Zeichnungen ${ZEICHNUNG} (${FARBEN} Farben), rohe Formel: ${FORMELROH}, Anzeigeart ${ANZEIGE}, bereit nach ${LADEZEIT} ms, Zeichnen ${ZEICHENZEIT} ms"
   if [ "$SCROLL" -gt "$BREITE" ]; then
     echo "     UEBERLAUF: Inhalt ist breiter als das Fenster -> $UEBERLAUF"
     FEHLER=1
@@ -76,6 +78,13 @@ for B in $BREITEN; do
     FEHLER=1
   fi
 done
+
+echo "== Hoerfassung (TTS-12)"
+rufe --window-size=500,900 --dump-dom "http://127.0.0.1:$PORT/#/hoeren/lek-01" > "$ARBEIT/hoeren.html" || true
+echo "-- Knopf 'Hoerfassung starten':"; grep -o "Hoerfassung starten" "$ARBEIT/hoeren.html" | wc -l
+echo "-- Rueckweg zur Lektion:"; grep -o "Zur Lektion mit Experiment" "$ARBEIT/hoeren.html" | wc -l
+echo "-- Experiment-Widget (soll 0 sein, Bedienung wird uebersprungen):"; grep -o 'class="experiment"' "$ARBEIT/hoeren.html" | wc -l
+echo "-- Vorleserleiste sichtbar (soll 0 sein = hidden gesetzt):"; grep -o 'id="vorleser" hidden' "$ARBEIT/hoeren.html" | wc -l
 
 echo "== Bilder"
 rufe --window-size=500,900 --screenshot="$ARBEIT/telefon.png" "http://127.0.0.1:$PORT/#/lektion/lek-01" > /dev/null || true

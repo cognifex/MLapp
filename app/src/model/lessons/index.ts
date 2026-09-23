@@ -13,6 +13,15 @@ import { lek05 } from "./lek-05.js";
 export const chapters: Chapter[] = [
   { id: "kap-01", title: "Grundlagen: Funktionen, Vektoren, Matrizen", order: 1 },
   { id: "kap-02", title: "Ableitung und Gradient", order: 2 },
+  { id: "kap-03", title: "Wahrscheinlichkeit, Entropie, Regression", order: 3 },
+  { id: "kap-04", title: "Klassifikation und Generalisierung", order: 4 },
+  { id: "kap-05", title: "Neuronale Netze", order: 5 },
+  { id: "kap-06", title: "Repraesentationen", order: 6 },
+  { id: "kap-07", title: "Sequenzen und Attention", order: 7 },
+  { id: "kap-08", title: "Sprachmodelle", order: 8 },
+  { id: "kap-09", title: "Diffusion", order: 9 },
+  { id: "kap-10", title: "Reinforcement Learning", order: 10 },
+  { id: "kap-11", title: "Gesamtsystem", order: 11 },
 ];
 
 export const lessons: Lesson[] = [lek01, lek02, lek03, lek04, lek05];

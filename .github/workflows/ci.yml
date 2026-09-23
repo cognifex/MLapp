@@ -2,7 +2,7 @@ name: CI
 
 # Baut und prueft bei jedem Push und jedem Pull Request:
 #  1. Schema und Datenmodell: Typen, Tests, Katalog-Validator
-#  2. Web-Bau (dist/) als Artefakt
+#  2. Web-Bau (dist/) als Artefakt samt Oberflaechenmessung
 #  3. Android-Debug-APK ueber denselben Bauweg wie auf dem Geraet (ohne Gradle)
 on:
   push:
@@ -74,9 +74,21 @@ jobs:
           ANDROID_KEYSTORE_PASSWORT: android
           ANDROID_KEY_ALIAS: mlapp-debug
         run: |
-          # Rahmenwerk-Jar aus der auf dem Laeufer vorhandenen Plattform nehmen.
-          export ANDROID_JAR="$(ls -d "$ANDROID_HOME"/platforms/android-3* 2>/dev/null | sort | tail -1)/android.jar"
+          # Rahmenwerk-Jar und Bauwerkzeuge des Laeufers benutzen. Der alte aapt ist in
+          # neueren build-tools nicht mehr enthalten; dann wird 33.0.2 nachinstalliert.
+          PLATFORM="$(ls -d "$ANDROID_HOME"/platforms/android-35 2>/dev/null || ls -d "$ANDROID_HOME"/platforms/android-3* | sort -V | tail -1)"
+          export ANDROID_JAR="$PLATFORM/android.jar"
+          BUILD_TOOLS="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
+          export PATH="$BUILD_TOOLS:$PATH"
+          if ! command -v aapt >/dev/null 2>&1; then
+            echo "aapt fehlt in $BUILD_TOOLS - installiere build-tools 33.0.2"
+            SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+            yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
+            "$SDKMANAGER" "build-tools;33.0.2" > /dev/null
+            export PATH="$ANDROID_HOME/build-tools/33.0.2:$PATH"
+          fi
           echo "Rahmenwerk: $ANDROID_JAR"
+          command -v aapt d8 zipalign apksigner
           test -f "$ANDROID_JAR"
           bash scripts/build-android.sh
       - uses: actions/upload-artifact@v4

@@ -63,16 +63,16 @@ Alternativen in [docs/adr/0001-zielarchitektur.md](docs/adr/0001-zielarchitektur
 
 ## Stand
 
-* **Alle 44 Lektionen des Curriculums** sind umgesetzt: je ein bedienbares Experiment, ein
+- **Alle 44 Lektionen des Curriculums** sind umgesetzt: je ein bedienbares Experiment, ein
   durchgerechnetes Beispiel, eine Verstaendnisaufgabe mit Begruendung, eine Zusammenfassung und
   eine vollstaendige Sprechfassung. Dazu 44 Experimente und 19 Testdateien mit von Hand
   nachgerechneten Referenzwerten (264 Tests).
-* Schema, Experiment-Vertrag, semantische Ereignisse, Fortschritt, Formelanzeige,
+- Schema, Experiment-Vertrag, semantische Ereignisse, Fortschritt, Formelanzeige,
   Aussprachelexikon und Hoerfassung stehen; der Validator prueft jede Lektion mit Datei- und
   Block-ID.
-* Die Android-Huelle baut eine signierte Debug-APK ohne Gradle und stellt die Sprachausgabe als
+- Die Android-Huelle baut eine signierte Debug-APK ohne Gradle und stellt die Sprachausgabe als
   Vordergrunddienst mit Mediensteuerung und Audio-Fokus bereit.
-* Gemessen: Web-Bau 2,3 MB, 25.000 Zeilen TypeScript und Python, APK 554 KB mit allen Lektionen
+- Gemessen: Web-Bau 2,3 MB, 25.000 Zeilen TypeScript und Python, APK 554 KB mit allen Lektionen
   vollstaendig offline, Oberflaeche bereit nach rund 1 s, Zeichnen 3 bis 4 ms.
 
 Offen sind neun Issues, die eine Pruefung am Geraet brauchen (Hoeren der Sprache, Bedienung mit

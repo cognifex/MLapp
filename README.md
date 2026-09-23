@@ -46,7 +46,11 @@ Der Pruefablauf mit allen Einzelheiten und den Eigenheiten auf Android steht in
     android/                  Android-Huelle (WebView + Sprachdienst), ohne Gradle baubar
     tests/                    node:test-Pruefungen
     docs/adr/0001-...         Architekturentscheidung (AND-01)
-    tools/                    Entwicklungsserver und Kopieren der Anlagen
+    docs/lektion-bauen.md     Anleitung fuer neue Lektionen (Vertrag, Muster, IDs)
+    docs/lektion-vorlage.md   didaktische Vorlage und redaktionelle Regeln (CONTENT-04)
+    docs/pruefablauf.md       alle Pruefungen und die Eigenheiten auf Android
+    docs/geraetepruefung.md   Handgriffe, die nur am Geraet zu pruefen sind
+    tools/                    Entwicklungsserver, Kopieren der Anlagen, Zusammenbau des Katalogs
 
 ## Architektur in drei Saetzen
 
@@ -59,13 +63,22 @@ Alternativen in [docs/adr/0001-zielarchitektur.md](docs/adr/0001-zielarchitektur
 
 ## Stand
 
-- Lektionen 1 bis 5 aus dem Curriculum sind umgesetzt (Funktionen, Vektoren, Matrizen,
-  Ableitung, Gradient) - mit Experiment, Quiz, Zusammenfassung und Sprechfassung.
-- Schema, Experiment-Vertrag, semantische Ereignisse, Fortschritt, Formelanzeige und
-  Aussprachelexikon stehen; der Validator prueft jede Lektion mit Datei- und Block-ID.
-- Die Android-Huelle baut eine signierte Debug-APK ohne Gradle und stellt die Sprachausgabe als
+* **Alle 44 Lektionen des Curriculums** sind umgesetzt: je ein bedienbares Experiment, ein
+  durchgerechnetes Beispiel, eine Verstaendnisaufgabe mit Begruendung, eine Zusammenfassung und
+  eine vollstaendige Sprechfassung. Dazu 44 Experimente und 19 Testdateien mit von Hand
+  nachgerechneten Referenzwerten (264 Tests).
+* Schema, Experiment-Vertrag, semantische Ereignisse, Fortschritt, Formelanzeige,
+  Aussprachelexikon und Hoerfassung stehen; der Validator prueft jede Lektion mit Datei- und
+  Block-ID.
+* Die Android-Huelle baut eine signierte Debug-APK ohne Gradle und stellt die Sprachausgabe als
   Vordergrunddienst mit Mediensteuerung und Audio-Fokus bereit.
+* Gemessen: Web-Bau 2,3 MB, 25.000 Zeilen TypeScript und Python, APK 554 KB mit allen Lektionen
+  vollstaendig offline, Oberflaeche bereit nach rund 1 s, Zeichnen 3 bis 4 ms.
 
-Die Lehren 6 bis 44 sind noch offen; das Muster fuer eine neue Lektion steht fest:
-Lektion nach `lek-NN`, Experiment nach `exp-name`, Regler nach dem Vertrag, Sprechtexte fuer
-jeden Block - dann `npm run validate` und `npm test` laufen lassen.
+Offen sind neun Issues, die eine Pruefung am Geraet brauchen (Hoeren der Sprache, Bedienung mit
+dem Finger, TalkBack, Geraetematrix). Die Handgriffe dafuer stehen in
+[docs/geraetepruefung.md](docs/geraetepruefung.md).
+
+Eine neue Lektion entsteht nach [docs/lektion-bauen.md](docs/lektion-bauen.md); die didaktischen
+Anforderungen stehen in [docs/lektion-vorlage.md](docs/lektion-vorlage.md) und sind als Test
+hinterlegt.
